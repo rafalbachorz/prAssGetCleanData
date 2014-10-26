@@ -95,7 +95,7 @@ descriptiveActivityNames<-activityLabels[,2][finalSetMean$Activity]
 finalSetMean<-cbind(finalSetMean, descriptiveActivityNames)
 
 #remove not needed data frames
-rm(relevantFeaturesLabels, currSubset, activityLabels)
+rm(relevantFeaturesLabels, currSubset, activityLabels, features)
 
 #write the final table to file
-write.table(finalSetMean, "finalTable.txt", row.names=FALSE)
+write.table(finalSetMean, "finalSetMean.txt", row.names=FALSE)

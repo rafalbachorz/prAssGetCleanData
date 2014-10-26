@@ -8,3 +8,5 @@ The script "run_analysis.R" makes the following steps to accomplish the tasks in
 6. Calculates the mean values of all possible combinations activity/subject for the data in the relevantFeatures; resulting data frame: finalSetMean.
 7. Cleans up the environment.
 8. Writes the finalSetMean data frame on the file according to the remarks.
+
+Read "CodeBook.md" for further information.
