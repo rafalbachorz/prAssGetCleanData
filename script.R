@@ -35,7 +35,6 @@ finalSet=rbind(trainData, testData)
 activityLabels<-read.csv("activity_labels.txt", sep="", header=FALSE)
 descriptiveActivityNames<-activityLabels[,2][finalSet$Activity]
 finalSet<-cbind(finalSet, descriptiveActivityNames)
-rm(activityLabels)
 
 rm(testData, trainData)
 
@@ -73,21 +72,30 @@ for (subjectLoop in 1:30){
     if (nRows > 0) {
       if (first){
         #prepare the data frame (for first=TRUE)
-        finalSet<-apply(currSubset,2,mean)
-        finalSet<-data.frame(as.list(finalSet))
-        finalSet<-cbind(finalSet, 1)
-        finalSet<-cbind(finalSet, 1)
-        colnames(finalSet)[length(finalSet)-1]<-"Subject"
-        colnames(finalSet)[length(finalSet)]<-"Activity"
+        finalSetMean<-apply(currSubset,2,mean)
+        finalSetMean<-data.frame(as.list(finalSetMean))
+        finalSetMean<-cbind(finalSetMean, 1)
+        finalSetMean<-cbind(finalSetMean, 1)
+        colnames(finalSetMean)[length(finalSetMean)-1]<-"SubjectIDX"
+        colnames(finalSetMean)[length(finalSetMean)]<-"ActivityIDX"
         first<-FALSE
       } else {
         #add next mean values (for first=FALSE)  
-        finalSet<-rbind(finalSet, apply(currSubset,2,mean))
-        finalSet[irow,length(finalSet)-1]<-subjectLoop
-        finalSet[irow,length(finalSet)]<-activityLoop
+        finalSetMean<-rbind(finalSetMean, apply(currSubset,2,mean))
+        finalSetMean[irow,length(finalSetMean)-1]<-subjectLoop
+        finalSetMean[irow,length(finalSetMean)]<-activityLoop
       }
       
     }
   }
 }
-rm(relevantFeaturesLabels, currSubset)
+
+#add descriptive activity name
+descriptiveActivityNames<-activityLabels[,2][finalSetMean$Activity]
+finalSetMean<-cbind(finalSetMean, descriptiveActivityNames)
+
+#remove not needed data frames
+rm(relevantFeaturesLabels, currSubset, activityLabels)
+
+#write the final table to file
+write.table(finalSetMean, "finalTable.txt", row.names=FALSE)
